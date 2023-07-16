@@ -53,9 +53,11 @@
     <div id="map" class="h-full w-full"></div>
 
     <script>
-        const map = L.map('map', {
-            zoomControl: false
-        }).setView([9.1259672, 7.3840738], 13);
+        const map = L.map('map', {doubleClickZoom: false, zoomControl: false}).locate({setView: true, maxZoom: 13});
+
+        // const map = L.map('map', {
+        //     zoomControl: false
+        // }).setView([9.1259672, 7.3840738], 13);
 
         const tiles = L.tileLayer('https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
             tileSize: 256,
