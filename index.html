@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>7Express Delivery - Map</title>
+    <link rel="icon" href="https://7express.africa/wp-content/uploads/2023/06/favicon-150x150.png" sizes="32x32" />
+    <link rel="icon" href="https://7express.africa/wp-content/uploads/2023/06/favicon-300x300.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="https://7express.africa/wp-content/uploads/2023/06/favicon-300x300.png" />
+    <meta name="msapplication-TileImage"
+        content="https://7express.africa/wp-content/uploads/2023/06/favicon-300x300.png" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="h-screen bg-gray-100">
+    <div class="absolute w-full top-10 z-[999] flex flex-col sm:flex-row sm:justify-between px-12">
+        <div class="">
+            <form class="flex gap-3" action="">
+                <input placeholder="Tracking ID" required minlength="10" maxlength="10" type="text" id="" name=""
+                    class="font-bold uppercase text-lg w-full sm:!w-[15rem] py-3 px-4 block border-gray-900 rounded-md focus:border-[#35D544] focus:ring-[#35D544]" />
+                <button type="submit"
+                    class="block rounded-md !border-2 !border-black px-5 py-3 bg-[#35D544] text-base font-medium text-white shadow hover:bg-[#35D544] focus:outline-none focus:ring-2 focus:ring-[#35D544] focus:ring-offset-2 sm:px-10">
+                    Search
+                </button>
+                <button
+                    class="sm:hidden block rounded-md !border-2 !border-[#35D544] px-5 py-3 bg-black text-base font-medium text-white shadow hover:opacity-90 focus:outline-none focus:ring-2 sm:px-10">
+                    Get Started
+                </button>
+            </form>
+        </div>
+        <div class="hidden sm:block">
+            <button
+                class="block rounded-md !border-2 !border-[#35D544] px-5 py-3 bg-black text-base font-medium text-white shadow hover:opacity-90 focus:outline-none focus:ring-2 sm:px-10">Get
+                Started</button>
+        </div>
+    </div>
+    <div id="map" class="h-full w-full"></div>
+
+    <script>
+        const map = L.map('map', {
+            zoomControl: false
+        }).setView([9.1259672, 7.3840738], 13);
+
+        const tiles = L.tileLayer('https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            tileSize: 256,
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://techgfxlimited.com">Tech|GFX Technologies Limited</a>'
+        }).addTo(map);
+
+        let customerIcon = L.icon({
+            iconUrl: 'https://7express.africa/wp-content/uploads/2023/07/m-green.png',
+            iconSize: [50, 50], // size of the icon
+        });
+        let riderIcon = L.icon({
+            iconUrl: 'https://7express.africa/wp-content/uploads/2023/07/13.svg',
+            iconSize: [50, 50], // size of the icon
+        });
+
+
+        let myPoint = null;
+        function pointMe() {
+            if (myPoint) {
+                map.removeLayer(myPoint);
+            }
+            navigator.geolocation.getCurrentPosition((p) => {
+                console.log(p);
+                const { latitude, longitude } = p.coords;
+                myPoint = L.marker([latitude, longitude], { icon: customerIcon }).addTo(map).bindPopup('You are here').openPopup();
+            }, null, {
+                enableHighAccuracy: true,
+            });
+        }
+
+        let riderLocation = null;
+
+        lat = 9.1175481;
+        long = 7.4028591;
+
+        function updateRiderLocation() {
+            // loc = <- Fetch rider location from database / server
+            lat += Math.random() * 0.001;
+            long += Math.random() * 0.001;
+            if (riderLocation) {
+                map.removeLayer(riderLocation);
+            }
+            riderLocation = L.marker([lat, long], { icon: riderIcon }).addTo(map).bindPopup('Rider currently here').openPopup();
+        }
+
+        setInterval(updateRiderLocation, 1000 * 3);
+
+
+
+
+        pointMe();
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
